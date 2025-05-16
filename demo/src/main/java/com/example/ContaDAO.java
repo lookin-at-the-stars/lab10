@@ -1,17 +1,35 @@
-import java.sql.Connection;
-import java.sql.PreparedStatement;
+package com.example;
 import java.sql.SQLException;
 
-class ContaDAO implements IContaDAO {
+import java.util.List;
+
+public class ContaDAO implements IContaDAO {
+
+    PreparedStatement create;
+    public ContaDAO (Connection connection) throws SQLException {
+        create = connection.prepareStatement("INSERT INTO contas(nro_conta, saldo) VALUES (?,?)");
+    }
 
     public boolean criarConta(Conta conta) throws SQLException {
-        String sql = "INSERT INTO contas (numero, saldo) VALUES (?, ?)";
-        try (Connection conn = ConnectionFactory.getConnection();
-             PreparedStatement create = conn.prepareStatement(sql)) {
-            create.setInt(1, conta.getNumero());
-            create.setDouble(2, conta.getSaldo());
-            int rowsInserted = create.executeUpdate();
-            return rowsInserted > 0;
+        create.setInt(1, conta.getNumero());
+        create.setDouble(2, conta.getSaldo());
+        if(create.executeUpdate() > 0) {
+            return true;
         }
+        return false;
     }
+
+    public List<Conta> lerTodasContas() throws SQLException {
+        return null;
+    }
+
+    public Conta buscarPorNumero(int numeroConta) throws SQLException {
+        return null;
+    }
+
+    public void atualizarConta(Conta conta) throws SQLException {
+        return null;
+    }
+
+
 }
